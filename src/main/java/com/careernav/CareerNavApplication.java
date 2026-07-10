@@ -29,6 +29,17 @@ public class CareerNavApplication {
                 System.out.println("Seeded admin account: admin@scn.com / admin123");
             }
 
+            // Seed Custom Owner Admin if it doesn't exist
+            if (!userRepository.existsByEmail("rayyan.officialx@gmail.com")) {
+                User owner = new User();
+                owner.setName("Rayyan Admin");
+                owner.setEmail("rayyan.officialx@gmail.com");
+                owner.setPassword(passwordEncoder.encode("Rayyan@Admin"));
+                owner.setRole("admin");
+                userRepository.save(owner);
+                System.out.println("Seeded owner admin account: rayyan.officialx@gmail.com / Rayyan@Admin");
+            }
+
             // Seed Student if it doesn't exist
             if (!userRepository.existsByEmail("student@scn.com")) {
                 User student = new User();
