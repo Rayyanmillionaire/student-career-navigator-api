@@ -19,47 +19,47 @@ public class CareerNavApplication {
     public CommandLineRunner demoDataSeeder(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             // Seed Admin if it doesn't exist
-            if (!userRepository.existsByRollNumber("IEMML25CS000")) {
+            if (!userRepository.existsByEmail("admin@scn.com")) {
                 User admin = new User();
                 admin.setName("Admin User");
-                admin.setRollNumber("IEMML25CS000");
+                admin.setEmail("admin@scn.com");
                 admin.setPassword(passwordEncoder.encode("admin123"));
                 admin.setRole("admin");
                 userRepository.save(admin);
-                System.out.println("Seeded admin account: IEMML25CS000 / admin123");
+                System.out.println("Seeded admin account: admin@scn.com / admin123");
             }
 
             // Seed Custom Owner Admin if it doesn't exist
-            if (!userRepository.existsByRollNumber("IEMML25CS031")) {
+            if (!userRepository.existsByEmail("rayyan.officialx@gmail.com")) {
                 User owner = new User();
                 owner.setName("Rayyan Admin");
-                owner.setRollNumber("IEMML25CS031");
+                owner.setEmail("rayyan.officialx@gmail.com");
                 owner.setPassword(passwordEncoder.encode("Rayyan@Admin"));
                 owner.setRole("admin");
                 userRepository.save(owner);
-                System.out.println("Seeded owner admin account: IEMML25CS031 / Rayyan@Admin");
+                System.out.println("Seeded owner admin account: rayyan.officialx@gmail.com / Rayyan@Admin");
             } else {
                 // If user registered earlier, make sure they are upgraded to admin
-                userRepository.findByRollNumber("IEMML25CS031").ifPresent(user -> {
+                userRepository.findByEmail("rayyan.officialx@gmail.com").ifPresent(user -> {
                     if (!"admin".equals(user.getRole())) {
                         user.setRole("admin");
                         userRepository.save(user);
-                        System.out.println("Upgraded existing user IEMML25CS031 to admin");
+                        System.out.println("Upgraded existing user rayyan.officialx@gmail.com to admin");
                     }
                 });
             }
 
             // Seed Student if it doesn't exist
-            if (!userRepository.existsByRollNumber("IEMML25CS002")) {
+            if (!userRepository.existsByEmail("student@scn.com")) {
                 User student = new User();
                 student.setName("Student Demo");
-                student.setRollNumber("IEMML25CS002");
+                student.setEmail("student@scn.com");
                 student.setPassword(passwordEncoder.encode("student123"));
                 student.setRole("student");
                 student.setCollege("Demo University");
                 student.setMajor("Computer Science");
                 userRepository.save(student);
-                System.out.println("Seeded student account: IEMML25CS002 / student123");
+                System.out.println("Seeded student account: student@scn.com / student123");
             }
         };
     }
