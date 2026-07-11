@@ -30,14 +30,23 @@ public class CareerNavApplication {
             }
 
             // Seed Custom Owner Admin if it doesn't exist
-            if (!userRepository.existsByRollNumber("IEMML25CS001")) {
+            if (!userRepository.existsByRollNumber("IEMML25CS031")) {
                 User owner = new User();
                 owner.setName("Rayyan Admin");
-                owner.setRollNumber("IEMML25CS001");
+                owner.setRollNumber("IEMML25CS031");
                 owner.setPassword(passwordEncoder.encode("Rayyan@Admin"));
                 owner.setRole("admin");
                 userRepository.save(owner);
-                System.out.println("Seeded owner admin account: IEMML25CS001 / Rayyan@Admin");
+                System.out.println("Seeded owner admin account: IEMML25CS031 / Rayyan@Admin");
+            } else {
+                // If user registered earlier, make sure they are upgraded to admin
+                userRepository.findByRollNumber("IEMML25CS031").ifPresent(user -> {
+                    if (!"admin".equals(user.getRole())) {
+                        user.setRole("admin");
+                        userRepository.save(user);
+                        System.out.println("Upgraded existing user IEMML25CS031 to admin");
+                    }
+                });
             }
 
             // Seed Student if it doesn't exist
