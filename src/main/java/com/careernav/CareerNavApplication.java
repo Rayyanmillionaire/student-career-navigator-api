@@ -19,38 +19,38 @@ public class CareerNavApplication {
     public CommandLineRunner demoDataSeeder(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             // Seed Admin if it doesn't exist
-            if (!userRepository.existsByEmail("admin@scn.com")) {
+            if (!userRepository.existsByRollNumber("IEMML25CS000")) {
                 User admin = new User();
                 admin.setName("Admin User");
-                admin.setEmail("admin@scn.com");
+                admin.setRollNumber("IEMML25CS000");
                 admin.setPassword(passwordEncoder.encode("admin123"));
                 admin.setRole("admin");
                 userRepository.save(admin);
-                System.out.println("Seeded admin account: admin@scn.com / admin123");
+                System.out.println("Seeded admin account: IEMML25CS000 / admin123");
             }
 
             // Seed Custom Owner Admin if it doesn't exist
-            if (!userRepository.existsByEmail("rayyan.officialx@gmail.com")) {
+            if (!userRepository.existsByRollNumber("IEMML25CS001")) {
                 User owner = new User();
                 owner.setName("Rayyan Admin");
-                owner.setEmail("rayyan.officialx@gmail.com");
+                owner.setRollNumber("IEMML25CS001");
                 owner.setPassword(passwordEncoder.encode("Rayyan@Admin"));
                 owner.setRole("admin");
                 userRepository.save(owner);
-                System.out.println("Seeded owner admin account: rayyan.officialx@gmail.com / Rayyan@Admin");
+                System.out.println("Seeded owner admin account: IEMML25CS001 / Rayyan@Admin");
             }
 
             // Seed Student if it doesn't exist
-            if (!userRepository.existsByEmail("student@scn.com")) {
+            if (!userRepository.existsByRollNumber("IEMML25CS002")) {
                 User student = new User();
                 student.setName("Student Demo");
-                student.setEmail("student@scn.com");
+                student.setRollNumber("IEMML25CS002");
                 student.setPassword(passwordEncoder.encode("student123"));
                 student.setRole("student");
                 student.setCollege("Demo University");
                 student.setMajor("Computer Science");
                 userRepository.save(student);
-                System.out.println("Seeded student account: student@scn.com / student123");
+                System.out.println("Seeded student account: IEMML25CS002 / student123");
             }
         };
     }

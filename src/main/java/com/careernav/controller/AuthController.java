@@ -22,19 +22,19 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Map<String, String> req) {
         String name = req.get("name");
-        String email = req.get("email");
+        String rollNumber = req.get("rollNumber");
         String password = req.get("password");
 
-        if (name == null || email == null || password == null) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Name, email and password are required."));
+        if (name == null || rollNumber == null || password == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Name, roll number and password are required."));
         }
-        if (userRepository.existsByEmail(email)) {
-            return ResponseEntity.badRequest().body(Map.of("error", "Email already registered."));
+        if (userRepository.existsByRollNumber(rollNumber)) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Roll number already registered."));
         }
 
         User user = new User();
         user.setName(name);
-        user.setEmail(email);
+        user.setRollNumber(rollNumber);
         user.setPassword(passwordEncoder.encode(password));
         user.setRole("student");
         userRepository.save(user);
@@ -49,12 +49,12 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> req) {
-        String email = req.get("email");
+        String rollNumber = req.get("rollNumber");
         String password = req.get("password");
 
-        User user = userRepository.findByEmail(email).orElse(null);
+        User user = userRepository.findByRollNumber(rollNumber).orElse(null);
         if (user == null || !passwordEncoder.matches(password, user.getPassword())) {
-            return ResponseEntity.status(401).body(Map.of("error", "Invalid email or password."));
+            return ResponseEntity.status(401).body(Map.of("error", "Invalid roll number or password."));
         }
 
         String token = generateTokenForUser(user);
@@ -67,7 +67,7 @@ public class AuthController {
     // Helper: create a lightweight UserDetails-like object for token generation
     private String generateTokenForUser(User user) {
         var userDetails = org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
+                .withUsername(user.getRollNumber())
                 .password(user.getPassword())
                 .roles(user.getRole().toUpperCase())
                 .build();
@@ -79,7 +79,7 @@ public class AuthController {
         return Map.of(
             "id", user.getId(),
             "name", user.getName(),
-            "email", user.getEmail(),
+            "rollNumber", user.getRollNumber(),
             "role", user.getRole()
         );
     }

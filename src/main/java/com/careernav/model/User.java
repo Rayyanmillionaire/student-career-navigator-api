@@ -20,8 +20,8 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+    @Column(nullable = false, unique = true, name = "roll_number")
+    private String rollNumber;
 
     @Column(nullable = false)
     private String password;
