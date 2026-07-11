@@ -14,6 +14,7 @@ import java.util.Map;
 public class AdminController {
 
     private final UserRepository userRepository;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers() {
@@ -34,5 +35,20 @@ public class AdminController {
         }
         userRepository.deleteById(id);
         return ResponseEntity.ok(Map.of("message", "User deleted."));
+    }
+
+    @PutMapping("/users/{id}/reset-password")
+    public ResponseEntity<?> resetUserPassword(@PathVariable Long id, @RequestBody Map<String, String> req) {
+        com.careernav.model.User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        String newPassword = req.get("newPassword");
+        if (newPassword == null || newPassword.length() < 6) {
+            return ResponseEntity.badRequest().body(Map.of("error", "Password must be at least 6 characters."));
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return ResponseEntity.ok(Map.of("message", "Password reset successfully."));
     }
 }
